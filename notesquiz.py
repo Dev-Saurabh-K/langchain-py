@@ -9,14 +9,14 @@ load_dotenv()
 token=os.getenv("GEMINI_API_KEY2")
 
 model1 = ChatGoogleGenerativeAI(
-    model='gemini-2.5-flash-lite', 
+    model='gemini-2.5-flash', 
     api_key=token
 )
 
 # result=model1.invoke("hi")
 # print(result.text)
 
-model2 = ChatGoogleGenerativeAI(model='gemini-2.5-flash-lite')
+model2 = ChatGoogleGenerativeAI(model='gemini-2.5-flash')
 
 prompt1 = PromptTemplate(
     template='Generate short and simple notes from the following text \n {text}',
