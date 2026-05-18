@@ -26,16 +26,34 @@ vectorstore = FAISS.from_documents(documents=all_docs, embedding=embedding_model
 # print(vectorstore)
 
 
-# similarity_retriver = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k":5})
-
-similarity_retriver = vectorstore.as_retriever(search_type="mmr", search_kwargs={"k":5})
-
-query = 'what is good for health?'
+similarity_retriver = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k":5})
 
 
-results = similarity_retriver.invoke(query)
+# for mmr retriever
+# similarity_retriver = vectorstore.as_retriever(search_type="mmr", search_kwargs={"k":5})
 
-for result in results:
-    print(result.page_content)
-    print('\\n')
+multiquery_retriever = MultiQueryRetriever.from_llm(
+    retriever=vectorstore.as_retriever(search_kwargs = {"k": 5}),
+    llm=ChatGoogleGenerativeAI(model='gemini-2.5-flash-lite')
+)
 
+query = 'How to improve energy level and maintain balance?'
+
+
+similarity_result = similarity_retriver.invoke(query)
+multiquery_result = multiquery_retriever.invoke(query)
+
+
+
+# results = similarity_retriver.invoke(query)
+
+# for result in results:
+#     print(result.page_content)
+#     print('\\n')
+
+for i in range(0,5):
+    print(similarity_result[i].page_content)
+    print(multiquery_result[i].page_content)
+
+
+# multiquery give more accurate and relevant answer
